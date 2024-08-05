@@ -1,25 +1,24 @@
 import React from "react";
-import { app, appInitialization, authentication } from "@microsoft/teams-js";
-import { BearerTokenAuthProvider, createApiClient, TeamsUserCredential } from "@microsoft/teamsfx";
-import { Button, Field, Input, InputOnChangeData, Textarea } from "@fluentui/react-components";
+import { app, authentication } from "@microsoft/teams-js";
+import "./EnsureSiteUser.css"
+import { Button, Field, Input, InputOnChangeData } from "@fluentui/react-components";
 import Axios from "axios";
 import config from "./lib/config";
 
 export const EnsureSiteUser: React.FC<{}> = () =>  {
   const [siteUrl, setSiteUrl] = React.useState<string>("");
   const [groupId, setGroupId] = React.useState<string>("");
-  const [sitePath, setSitePath] = React.useState<string>("");
   const [userLogin, setUserLogin] = React.useState<string>("");
   const [token, setToken] = React.useState<string>("");
 
   const onUserLoginChange =  React.useCallback((ev: React.ChangeEvent<HTMLInputElement>, newValue: InputOnChangeData) => {
     setUserLogin(newValue.value);
-  }, [userLogin]);
+  }, []);
 
   const onEnsureUser = React.useCallback(() => {
     const requestBody = {
       groupId: groupId,
-      sitePath: sitePath
+      userLogin: userLogin
     };
 
     Axios.post(`${config.apiEndpoint}/api/getSPOUser`, requestBody, {
@@ -33,7 +32,7 @@ export const EnsureSiteUser: React.FC<{}> = () =>  {
     .catch((error) => {
       console.log(error);
     });
-  }, [token]);
+  }, [token, groupId, userLogin]);
 
   React.useEffect(() => {
     app.initialize()
@@ -43,7 +42,6 @@ export const EnsureSiteUser: React.FC<{}> = () =>  {
         if (context.sharePointSite !== undefined) {
           setSiteUrl(context.sharePointSite?.teamSiteUrl!);
           setGroupId(context.team?.groupId!);
-          setSitePath(context.sharePointSite?.teamSitePath!);
           setUserLogin(context.user?.userPrincipalName!);
         }
         authentication.getAuthToken()
@@ -55,34 +53,24 @@ export const EnsureSiteUser: React.FC<{}> = () =>  {
   }, []);
 
   return (
-    <div className="welcome page">
-      <div>
+    <div className="block">
+      <div className="field">
         <Field label='Site Url' >
           <Input disabled  value={siteUrl} />
         </Field>
       </div>
-      <div>
+      <div className="field">
         <Field label='Group / Team ID' >
           <Input disabled value={groupId} />
         </Field>
-      </div>
-      <div>
-        <Field label='Site Path' >
-          <Input disabled value={sitePath} />
-        </Field>
-      </div>
-      <div>
-        <Field label='Site Url' >
+      </div>      
+      <div className="field">
+        <Field label='User' >
           <Input value={userLogin} onChange={onUserLoginChange} />
         </Field>
-      </div>
-      <div>
-        <Field label='Token' >
-          <Textarea value={token} disabled />
-        </Field>
-      </div>
-      <div>
-        <Button appearance="primary" onClick={onEnsureUser}>Click me</Button>
+      </div>      
+      <div className="button">
+        <Button appearance="primary" onClick={onEnsureUser}>Ensure user</Button>
       </div>
     </div>
   );

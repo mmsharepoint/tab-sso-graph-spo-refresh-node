@@ -7,7 +7,7 @@ Although Microsoft Graph is the way to go there are still gaps to the original S
 
 Teams Tab 
 
-![Teams Tab](assets/)
+![Teams Tab to ensure a SharePoint user in current's Team site](assets/Screenshot.png)
 
 For further details see the author's [blog post](https://mmsharepoint.wordpress.com/2024/)
 

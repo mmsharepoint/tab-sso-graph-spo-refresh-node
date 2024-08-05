@@ -13,6 +13,9 @@ import {
 import config from "../config";
 import { TokenCredentialAuthenticationProvider } from "@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials";
 import { Client } from "@microsoft/microsoft-graph-client";
+import { exchangeForToken, getSPOToken } from "../services/tokenService";
+import { ensureSPOUserByLogin, getWeb } from "../services/spoService";
+import { EnsureRequest } from "../../model/EnsureRequest";
 
 /**
  * This function handles requests from teamsapp client.
@@ -33,9 +36,8 @@ export async function getSPOUser(
   };
   const body = Object();
 
-  // Put an echo into response body.
-  body.receivedHTTPRequestBody = (await req.text()) || "";
-
+  const reqBodyTxt = await req.text();
+  const reqBodyJsn = JSON.parse(reqBodyTxt) as EnsureRequest; 
   // Prepare access token.
   const accessToken: string = req.headers.get("Authorization")?.replace("Bearer ", "").trim();
   if (!accessToken) {
@@ -69,39 +71,25 @@ export async function getSPOUser(
     };
   }
 
-  // Query user's information from the access token.
   try {
-    const currentUser: UserInfo = await oboCredential.getUserInfo();
-    if (currentUser && currentUser.displayName) {
-      body.userInfoMessage = `User display name is ${currentUser.displayName}.`;
-    } else {
-      body.userInfoMessage = "No user information was found in access token.";
-    }
-  } catch (e) {
-    context.error(e);
-    return {
-      status: 400,
-      body: JSON.stringify({
-        error: "Access token is invalid.",
-      }),
-    };
-  }
-
-  // Create a graph client with default scope to access user's Microsoft 365 data after user has consented.
-  try {
+    const scopes: string[] = ["https://graph.microsoft.com/.default", "offline_access"];
     // Create an instance of the TokenCredentialAuthenticationProvider by passing the tokenCredential instance and options to the constructor
     const authProvider = new TokenCredentialAuthenticationProvider(oboCredential, {
-      scopes: ["https://graph.microsoft.com/.default"],
+      scopes: scopes,
     });
+    const authToken = await exchangeForToken(config.tenantId, accessToken, scopes);
+
+    const spoToken = await getSPOToken(config.spoScope, authToken.refreshToken);
 
     // Initialize Graph client instance with authProvider
     const graphClient = Client.initWithMiddleware({
       authProvider: authProvider,
     });
-
-    // body.graphClientMessage = await graphClient.api("/me").get();
-    const site = await graphClient.api(`/groups/${body.receivedHTTPRequestBody.groupId}/sites/root`).get();
-    body.siteID = site.id;
+    const groupRequestUrl = `/groups/${reqBodyJsn.groupId}/sites/root`; 
+    const site = await graphClient.api(groupRequestUrl).get();
+    // const web = await getWeb(spoToken, site.webUrl);
+    const user = await ensureSPOUserByLogin(spoToken, reqBodyJsn.userLogin, site.webUrl);
+    body.user = site.user;
   } catch (e) {
     context.error(e);
     return {
@@ -119,7 +107,7 @@ export async function getSPOUser(
 }
 
 app.http("getSPOUser", {
-  methods: ["GET", "POST"],
+  methods: ["POST"],
   authLevel: "anonymous",
   handler: getSPOUser,
 });
