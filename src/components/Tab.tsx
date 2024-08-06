@@ -1,10 +1,6 @@
 import { useContext } from "react";
-import { Welcome } from "./sample/Welcome";
 import { TeamsFxContext } from "./Context";
-import config from "./sample/lib/config";
 import { EnsureSiteUser } from "./sample/EnsureSiteUser";
-
-const showFunction = Boolean(config.apiName);
 
 export default function Tab() {
   const { themeString } = useContext(TeamsFxContext);
@@ -12,7 +8,6 @@ export default function Tab() {
     <div
       className={themeString === "default" ? "light" : themeString === "dark" ? "dark" : "contrast"}
     >
-      {/* <Welcome showFunction={showFunction} /> */}
       <EnsureSiteUser />
     </div>
   );

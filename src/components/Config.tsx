@@ -1,10 +1,8 @@
 import React from "react";
 import { app, pages } from "@microsoft/teams-js";
-import config from "./sample/lib/config";
 
 export const Config: React.FC<{}> = () =>  {
-  //React.useEffect(() => {
-    console.log(`${process.env.REACT_APP_TAB_ENDPOINT}/EnsureSiteUser`);
+  React.useEffect(() => {
     app.initialize()
       .then(() => {
         pages.config.setValidityState(true);
@@ -15,15 +13,15 @@ export const Config: React.FC<{}> = () =>  {
             entityId: "grayIconTab",
             suggestedDisplayName: "Ensure Site User"
           });
-          configPromise.
-            then((result) => {saveEvent.notifySuccess()}).
-            catch((error) => {saveEvent.notifyFailure("failure message")});
+          configPromise
+            .then((result) => {saveEvent.notifySuccess()})
+            .catch((error) => {saveEvent.notifyFailure("failure message")});
         });
       })
       .catch((ex) => {
         console.log(ex);
       });    
-  //}, []);
+  }, []);
   return (
     <div className="welcome page">
       <h1>Configure Teams Tab</h1>

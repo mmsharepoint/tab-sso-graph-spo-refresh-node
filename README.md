@@ -5,11 +5,11 @@
 This app describes how to establish a Teams Tab as SSO solution including the generation of a second SharePoint access token.
 Although Microsoft Graph is the way to go there are still gaps to the original SharePoint rest API. One example is shown in this sample as it is the /_api/web/ensureuser endpoint
 
-Teams Tab 
+Teams Tab to ensure a SharePoint user in current's Team site
 
 ![Teams Tab to ensure a SharePoint user in current's Team site](assets/Screenshot.png)
 
-For further details see the author's [blog post](https://mmsharepoint.wordpress.com/2024/)
+For further details see the author's [blog post](https://mmsharepoint.wordpress.com/2021/06/22/use-sharepoint-rest-api-in-microsoft-teams-with-sso-and-on-behalf-flow/) on a previous version.
 
 ## Applies to
 
@@ -28,46 +28,20 @@ Version|Date|Author|Comments
 ## Minimal Path to Awesome
 - Clone the repository
     ```bash
-
-
-
-
-
-
-**Congratulations**! You are running an application that can now show a beautiful web page in Teams, Outlook and the Microsoft 365 app.
-
-![Personal tab demo](https://github.com/OfficeDev/TeamsFx/assets/63089166/9599b53c-8f89-493f-9f7e-9edae1f9be54)
-
-## What's included in the template
-
-| Folder       | Contents                                                                                                               |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| `.vscode`    | VSCode files for debugging                                                                                             |
-| `appPackage` | Templates for the Teams application manifest                                                                           |
-| `env`        | Environment files                                                                                                      |
-| `infra`      | Templates for provisioning Azure resources                                                                             |
-| `src`        | The source code for the frontend of the Tab application. Implemented with Fluent UI Framework.                         |
-| `api`        | The source code for the backend of the Tab application. Implemented single-sign-on with OBO flow using Azure Functions. |
-
-The following are Teams Toolkit specific project files. You can [visit a complete guide on Github](https://github.com/OfficeDev/TeamsFx/wiki/Teams-Toolkit-Visual-Studio-Code-v5-Guide#overview) to understand how Teams Toolkit works.
-
-| File                 | Contents                                                                                                                                                                                                                                                |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `teamsapp.yml`       | This is the main Teams Toolkit project file. The project file defines two primary things: Properties and configuration Stage definitions.                                                                                                               |
-| `teamsapp.local.yml` | This overrides `teamsapp.yml` with actions that enable local execution and debugging.                                                                                                                                                                   |
-| `aad.manifest.json`  | This file defines the configuration of Microsoft Entra app. This template will only provision [single tenant](https://learn.microsoft.com/azure/active-directory/develop/single-and-multi-tenant-apps#who-can-sign-in-to-your-app) Microsoft Entra app. |
-
-## Extend the React with Fluent UI template
-
-Following documentation will help you to extend the React with Fluent UI template.
-
-- [Add or manage the environment](https://learn.microsoft.com/microsoftteams/platform/toolkit/teamsfx-multi-env)
-- [Create multi-capability app](https://learn.microsoft.com/microsoftteams/platform/toolkit/add-capability)
-- [Use an existing Microsoft Entra application](https://learn.microsoft.com/microsoftteams/platform/toolkit/use-existing-aad-app)
-- [Customize the Teams app manifest](https://learn.microsoft.com/microsoftteams/platform/toolkit/teamsfx-preview-and-customize-app-manifest)
-- Host your app in Azure by [provision cloud resources](https://learn.microsoft.com/microsoftteams/platform/toolkit/provision) and [deploy the code to cloud](https://learn.microsoft.com/microsoftteams/platform/toolkit/deploy)
-- [Collaborate on app development](https://learn.microsoft.com/microsoftteams/platform/toolkit/teamsfx-collaboration)
-- [Set up the CI/CD pipeline](https://learn.microsoft.com/microsoftteams/platform/toolkit/use-cicd-template)
-- [Publish the app to your organization or the Microsoft Teams app store](https://learn.microsoft.com/microsoftteams/platform/toolkit/publish)
-- [Enable the app for multi-tenant](https://github.com/OfficeDev/TeamsFx/wiki/Multi-tenancy-Support-for-Azure-AD-app)
-- [Preview the app on mobile clients](https://github.com/OfficeDev/TeamsFx/wiki/Run-and-debug-your-Teams-application-on-iOS-or-Android-client)
+    git clone https://github.com/mmsharepoint/tab-sso-graph-spo-refresh-node>.git
+    ```
+- Create .env.local from .env.dev
+    ```bash
+    copy .\env\.env.dev .\env\.env.local
+    ```
+- Fill in your SharePoint tenant into AAD_APP_SPO_SCOPE
+- In Teams Toolkit:
+1. First, select the Teams Toolkit icon on the left in the VS Code toolbar.
+2. In the Account section, sign in with your [Microsoft 365 account](https://docs.microsoft.com/microsoftteams/platform/toolkit/accounts) if you haven't already.
+3. Press F5 to start debugging which launches your app in Teams using a web browser. Select `Debug in Teams (Edge)` or `Debug in Teams (Chrome)`.
+4. When Teams launches in the browser, select the Add button in the dialog to install your app to a Team of your choice
+5. Confirm the Configuration screen with Save
+  
+## Features
+- Using FluentUI 9 compontents
+- Generating Entra ID access tokens for Microsoft Graph but also SharePoint Rest Api access
