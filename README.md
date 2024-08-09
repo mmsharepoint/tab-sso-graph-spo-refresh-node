@@ -13,13 +13,13 @@ For further details see the author's [blog post](https://mmsharepoint.wordpress.
 
 ## Applies to
 
-This sample was created [using the Teams Toolkit with Visual Studio Code](https://learn.microsoft.com/en-us/microsoftteams/platform/toolkit/teams-toolkit-fundamentals?pivots=visual-studio&WT.mc_id=M365-MVP-5004617). The same sample will also realized with the [Teams Toolkit for Visual Studio 2022](https://learn.microsoft.com/en-us/microsoftteams/platform/toolkit/toolkit-v4/teams-toolkit-fundamentals-vs?WT.mc_id=M365-MVP-5004617) and ...
+This sample was created [using the Teams Toolkit with Visual Studio Code](https://learn.microsoft.com/en-us/microsoftteams/platform/toolkit/teams-toolkit-fundamentals?pivots=visual-studio&WT.mc_id=M365-MVP-5004617). The same sample was also realized with the [Teams Toolkit for Visual Studio 2022](https://learn.microsoft.com/en-us/microsoftteams/platform/toolkit/toolkit-v4/teams-toolkit-fundamentals-vs?WT.mc_id=M365-MVP-5004617) and can be found [here](https://github.com/mmsharepoint/tab-sso-graph-spo-refresh-csharp)
 
 ## Version history
 
 Version|Date|Author|Comments
 -------|----|----|--------
-1.0|Aug 08, 2024|[Markus Moeller](https://twitter.com/moeller2_0)|Initial release
+1.0|Aug 09, 2024|[Markus Moeller](https://twitter.com/moeller2_0)|Initial release
 
 ## Disclaimer
 
@@ -40,7 +40,8 @@ Version|Date|Author|Comments
 2. In the Account section, sign in with your [Microsoft 365 account](https://docs.microsoft.com/microsoftteams/platform/toolkit/accounts) if you haven't already.
 3. Press F5 to start debugging which launches your app in Teams using a web browser. Select `Debug in Teams (Edge)` or `Debug in Teams (Chrome)`.
 4. When Teams launches in the browser, select the Add button in the dialog to install your app to a Team of your choice
-5. Confirm the Configuration screen with Save
+5. Confirm the Configuration screen with 
+6. Ensure the permissions of your Entra ID app are consented tenant-wide
   
 ## Features
 - Using FluentUI 9 compontents
